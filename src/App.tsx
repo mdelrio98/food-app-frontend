@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-import Header from './components/Layout/Header.jsx';
-import Meals from './components/Meals/Meals.jsx';
-import Cart from './components/Cart/Cart.jsx';
-import CartProvider from './store/CartProvider.jsx';
+import Header from './components/Layout/Header';
+import Meals from './components/Meals/Meals';
+import Cart from './components/Cart/Cart';
+import CartProvider from './store/CartProvider';
 
-function App() {
+const App: React.FC = () => {
   const [cartIsShown, setCartIsShown] = useState(false);
 
   const showCartHandler = () => {

@@ -1,10 +1,15 @@
 import { Fragment } from 'react';
+import React from 'react';
 
-import HeaderCartButton from './HeaderCartButton.jsx';
+import HeaderCartButton from './HeaderCartButton';
 import mealsImage from '../../assets/meals.jpg';
 import classes from './Header.module.css';
 
-const Header = (props) => {
+interface HeaderProps {
+  onShowCart: () => void;
+}
+
+const Header: React.FC<HeaderProps> = (props) => {
   return (
     <Fragment>
       <header className={classes.header}>

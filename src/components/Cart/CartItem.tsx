@@ -1,6 +1,17 @@
+import { FC } from 'react';
+
 import classes from './CartItem.module.css';
 
-const CartItem = (props) => {
+// Define la interfaz para las props del componente
+interface CartItemProps {
+  price: number;
+  name: string;
+  amount: number;
+  onRemove: () => void;
+  onAdd: () => void;
+}
+
+const CartItem: FC<CartItemProps> = (props) => {
   const price = `$${props.price.toFixed(2)}`;
 
   return (

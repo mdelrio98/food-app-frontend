@@ -1,16 +1,27 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-import Input from '../../UI/Input.jsx';
+import Input from '../../UI/Input';
 import classes from './MealItemForm.module.css';
 
-const MealItemForm = (props) => {
-  const [amountIsValid, setAmountIsValid] = useState(true);
-  const amountInputRef = useRef();
+// Define la interfaz para las props del componente
+interface MealItemFormProps {
+  id: string;
+  onAddToCart: (amount: number) => void;
+}
 
-  const submitHandler = (event) => {
+const MealItemForm: React.FC<MealItemFormProps> = (props) => {
+  const [amountIsValid, setAmountIsValid] = useState(true);
+  const amountInputRef = useRef<HTMLInputElement>(null);
+
+  const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const enteredAmount = amountInputRef.current.value;
+    const enteredAmount = amountInputRef.current?.value;
+    // Si la ref no está conectada, no hacemos nada
+    if (!enteredAmount) {
+      return;
+    }
+
     const enteredAmountNumber = +enteredAmount;
 
     if (
@@ -31,7 +42,7 @@ const MealItemForm = (props) => {
         ref={amountInputRef}
         label='Amount'
         input={{
-          id: 'amount',
+          id: props.id, // Usa el id de las props para el input
           type: 'number',
           min: '1',
           max: '5',

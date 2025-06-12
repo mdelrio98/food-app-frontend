@@ -1,30 +1,53 @@
-import { useRef, useState } from 'react';
+import { FC, FormEvent, useRef, useState } from 'react';
 
 import classes from './Checkout.module.css';
 
-const isEmpty = (value) => value.trim() === '';
-const isFiveChars = (value) => value.trim().length === 5;
+// Funciones de validación simples
+const isEmpty = (value: string) => value.trim() === '';
+const isFiveChars = (value: string) => value.trim().length === 5;
 
-const Checkout = (props) => {
-  const [formInputsValidity, setFormInputsValidity] = useState({
+// Define la estructura de los datos del usuario
+export interface UserData {
+  name: string;
+  street: string;
+  city: string;
+  postalCode: string;
+}
+
+// Define la interfaz para las props del componente
+interface CheckoutProps {
+  onCancel: () => void;
+  onConfirm: (userData: UserData) => void;
+}
+
+// Define la estructura para el estado de validez del formulario
+interface FormInputsValidity {
+  name: boolean;
+  street: boolean;
+  city: boolean;
+  postalCode: boolean;
+}
+
+const Checkout: FC<CheckoutProps> = (props) => {
+  const [formInputsValidity, setFormInputsValidity] = useState<FormInputsValidity>({
     name: true,
     street: true,
     city: true,
     postalCode: true,
   });
 
-  const nameInputRef = useRef();
-  const streetInputRef = useRef();
-  const postalCodeInputRef = useRef();
-  const cityInputRef = useRef();
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const streetInputRef = useRef<HTMLInputElement>(null);
+  const postalCodeInputRef = useRef<HTMLInputElement>(null);
+  const cityInputRef = useRef<HTMLInputElement>(null);
 
-  const confirmHandler = (event) => {
+  const confirmHandler = (event: FormEvent) => {
     event.preventDefault();
 
-    const enteredName = nameInputRef.current.value;
-    const enteredStreet = streetInputRef.current.value;
-    const enteredPostalCode = postalCodeInputRef.current.value;
-    const enteredCity = cityInputRef.current.value;
+    const enteredName = nameInputRef.current!.value;
+    const enteredStreet = streetInputRef.current!.value;
+    const enteredPostalCode = postalCodeInputRef.current!.value;
+    const enteredCity = cityInputRef.current!.value;
 
     const enteredNameIsValid = !isEmpty(enteredName);
     const enteredStreetIsValid = !isEmpty(enteredStreet);

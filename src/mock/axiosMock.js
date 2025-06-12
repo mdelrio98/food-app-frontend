@@ -1,12 +1,8 @@
-import ReactDOM from 'react-dom/client';
-import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import api from '../services/axiosInstance';
 
-import './index.css';
-import App from './App.jsx';
-
-// Create a new instance of the mock adapter
-const mock = new MockAdapter(axios);
+// Create a new instance of the mock adapter on the axiosInstance
+const mock = new MockAdapter(api, { delayResponse: 500 });
 
 // Sample meal data
 const DUMMY_MEALS = [
@@ -37,10 +33,9 @@ const DUMMY_MEALS = [
 ];
 
 // Mock GET request to /api/meals
-// You can change the URL if you prefer something else, e.g., '/meals.json'
-// Ensure AvailableMeals.js calls this exact URL.
-mock.onGet('/api/meals').reply(200, DUMMY_MEALS);
+mock.onGet('/meals').reply(200, {
+  success: true,
+  data: DUMMY_MEALS,
+});
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+export default mock;
