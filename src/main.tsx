@@ -9,6 +9,10 @@ import App from './App';
 // Initialize axios mock adapter for development
 //import './mock/axiosMock.js';
 import { notifier } from './utils/notifier';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './store'; 
+import CartProvider from './store/CartProvider'; 
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -36,7 +40,11 @@ root.render(
       }}
     >
       <Notifier />
-      <App />
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
     </SnackbarProvider>
   </React.StrictMode>
 );

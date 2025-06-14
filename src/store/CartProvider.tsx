@@ -2,7 +2,7 @@ import { FC, ReactNode, useState, useEffect, useCallback } from 'react';
 import CartContext, { CartContextType } from './cart-context';
 import Api from '../services/Api';
 import { notifier } from '../utils/notifier';
-import { ICartItem } from '../types/types';
+import { AddItemToCartPayload, ICartItem } from '../types/types';
 
 // Define the structure of the cart state
 interface CartState {
@@ -44,14 +44,15 @@ const CartProvider: FC<CartProviderProps> = (props) => {
   const addItemToCartHandler = async (item: ICartItem) => {
     setIsLoading(true);
     try {
-      const payload = { productId: item.productId, quantity: item.quantity };
+      const payload: AddItemToCartPayload = { mealId: item.mealId, quantity: item.quantity };
+      console.log(payload);
       const response = await Api.addItemToCart(payload);
       if (response.status === 200) {
         setCart((prevCart) => {
           const updatedTotalAmount = prevCart.totalAmount + item.price * item.quantity;
 
           const existingCartItemIndex = prevCart.items.findIndex(
-            (cartItem) => cartItem.productId === item.productId
+            (cartItem) => cartItem.mealId === item.mealId
           );
           const existingCartItem = prevCart.items[existingCartItemIndex];
 
@@ -67,7 +68,7 @@ const CartProvider: FC<CartProviderProps> = (props) => {
           } else {
             // The API response for adding an item might not be the full product, 
             // so we construct the new cart item from the submitted `item`.
-            const newItem = { ...item, productId: item.productId };
+            const newItem = { ...item, mealId: item.mealId };
             updatedItems = prevCart.items.concat(newItem);
           }
 
@@ -91,13 +92,13 @@ const CartProvider: FC<CartProviderProps> = (props) => {
       const response = await Api.removeItemFromCart(id);
       if (response.status === 200) {
         setCart((prevCart) => {
-          const itemToRemove = prevCart.items.find((item) => item.productId === id);
+          const itemToRemove = prevCart.items.find((item) => item.mealId === id);
 
           if (!itemToRemove) {
             return prevCart; // Should not happen, but as a safeguard
           }
 
-          const updatedItems = prevCart.items.filter((item) => item.productId !== id);
+          const updatedItems = prevCart.items.filter((item) => item.mealId !== id);
           const updatedTotalAmount =
             prevCart.totalAmount - itemToRemove.price * itemToRemove.quantity;
 
@@ -139,10 +140,8 @@ const CartProvider: FC<CartProviderProps> = (props) => {
   };
 
   return (
-    <CartContext.Provider value={cartContext}>
-      {props.children}
-    </CartContext.Provider>
+    <CartContext.Provider value={cartContext}>{props.children}</CartContext.Provider>
   );
 };
 
-export default CartProvider;
+export { CartProvider as default };

@@ -19,7 +19,7 @@ const MealItem: React.FC<MealItemProps> = (props) => {
 
   const addToCartHandler = (amount: number) => {
     cartCtx.addItem({
-    productId: props.id,
+    mealId: props.id,
     name: props.name,
     quantity: amount,
     price: props.price,

@@ -3,25 +3,28 @@
 import { AxiosPromise } from 'axios';
 import {
   User,
-  Product,
   Order,
-  CreateProductPayload,
-  UpdateProductPayload,
   CreateOrderPayload,
   UpdateOrderStatusPayload,
-  LoginRequestPayload,
-  LoginResponseData,
   Cart,
   AddItemToCartPayload,
-  GetProductsResponse,
   PostCartItemResponse,
+  CreateMealPayload,
+  GetMealsResponse,
+  Meal,
+  UpdateMealPayload,
 } from '../types/types';
-import {api} from './axiosInstance';
+import { AuthResponse, LoginPayload, RegisterPayload } from '../types/auth';
+import { api } from './axiosInstance';
 
 export default class Api {
   // --- Auth Service --- //
-  public static login = (credentials: LoginRequestPayload): AxiosPromise<LoginResponseData> => {
+  public static login = (credentials: LoginPayload): AxiosPromise<AuthResponse> => {
     return api.post('/auth/login', credentials);
+  };
+
+  public static register = (userData: RegisterPayload): AxiosPromise<AuthResponse> => {
+    return api.post('/auth/register', userData);
   };
 
   public static fetchUserProfile = (): AxiosPromise<User> => {
@@ -37,25 +40,25 @@ export default class Api {
     return api.get(`/users/${id}`);
   };
 
-  // --- Product Service --- //
-  public static fetchProducts = (): AxiosPromise<GetProductsResponse> => {
-    return api.get('/products');
+  // --- Meal Service --- //
+  public static fetchMeals = (): AxiosPromise<GetMealsResponse> => {
+    return api.get('/meals');
   };
 
-  public static fetchProductById = (id: string): AxiosPromise<Product> => {
-    return api.get(`/products/${id}`);
+  public static fetchMealById = (id: string): AxiosPromise<Meal> => {
+    return api.get(`/meals/${id}`);
   };
 
-  public static createProduct = (data: CreateProductPayload): AxiosPromise<Product> => {
-    return api.post('/products', data);
+  public static createMeal = (data: CreateMealPayload): AxiosPromise<Meal> => {
+    return api.post('/meals', data);
   };
 
-  public static updateProduct = (id: string, data: UpdateProductPayload): AxiosPromise<Product> => {
-    return api.put(`/products/${id}`, data);
+  public static updateMeal = (id: string, data: UpdateMealPayload): AxiosPromise<Meal> => {
+    return api.put(`/meals/${id}`, data);
   };
 
-  public static deleteProduct = (id: string): AxiosPromise<void> => {
-    return api.delete(`/products/${id}`);
+  public static deleteMeal = (id: string): AxiosPromise<void> => {
+    return api.delete(`/meals/${id}`);
   };
 
   // --- Order Service --- //
@@ -84,8 +87,8 @@ export default class Api {
     return api.post('/cart/items', payload);
   };
 
-  public static removeItemFromCart = (productId: string): AxiosPromise<Cart> => {
-    return api.delete(`/cart/items/${productId}`);
+  public static removeItemFromCart = (MealId: string): AxiosPromise<Cart> => {
+    return api.delete(`/cart/items/${MealId}`);
   };
 
   public static clearCart = (): AxiosPromise<void> => {

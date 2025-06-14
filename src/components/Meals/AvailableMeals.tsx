@@ -6,7 +6,7 @@ import classes from './AvailableMeals.module.css';
 import Api from '../../services/Api';
 
 
-// We can reuse the Product interface from our types definition if it matches
+// We can reuse the Meal interface from our types definition if it matches
 // or create a specific one if needed. For now, let's define it locally for clarity.
 interface Meal {
   id: string;
@@ -25,10 +25,17 @@ const AvailableMeals: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await Api.fetchProducts();
+        const response = await Api.fetchMeals();
         if (response.status === 200) {
-          // The API returns the array directly in the 'data' property.
-          setMeals(response.data.meals);
+          const apiResponse = response.data; // apiResponse is GetMealsResponse { meals: Meal[] }
+          if (apiResponse && Array.isArray(apiResponse.meals)) {
+            setMeals(apiResponse.meals);
+          } else {
+            setMeals([]);
+            console.error('API response for meals was not in the expected format or meals array is missing:', apiResponse);
+            // Optionally, set an error state here to inform the user
+            // setError('Failed to load meals: unexpected response format.');
+          }
         } else {
           throw new Error(response.statusText || 'Failed to fetch meals.');
         }
@@ -50,8 +57,15 @@ const AvailableMeals: React.FC = () => {
     );
   }
 
+  if (error) {
+    return (
+      <section className={classes.MealsError}>
+        <p>{error}</p>
+      </section>
+    );
+  }
 
-  const mealsList = meals.map((meal) => (
+  const mealsList = meals.map((meal: Meal) => (
     <MealItem
       key={meal.id}
       id={meal.id}
@@ -60,7 +74,6 @@ const AvailableMeals: React.FC = () => {
       price={meal.price}
     />
   ));
-
   return (
     <section className={classes.meals}>
       <Card>

@@ -1,4 +1,6 @@
 import { FC, Fragment, useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store'; 
 
 import Modal from '../UI/Modal';
 import CartItem from './CartItem';
@@ -14,6 +16,7 @@ interface CartProps {
 }
 
 const Cart: FC<CartProps> = (props) => {
+  const { user } = useSelector((state: RootState) => state.auth);
   const [isCheckout, setIsCheckout] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [didSubmit, setDidSubmit] = useState(false);
@@ -30,7 +33,7 @@ const Cart: FC<CartProps> = (props) => {
 
   const cartItemAddHandler = (item:ICartItem) => {
     // El contexto ya debería manejar la lógica de agregar un item existente
-    cartCtx.addItem({ ...item, quantity: 1 });
+    cartCtx.addItem({ ...item, mealId: item.mealId, quantity: 1 });
   };
 
   const orderHandler = () => {
@@ -42,10 +45,15 @@ const Cart: FC<CartProps> = (props) => {
     setError(null);
     try {
       // Usar el servicio de API en lugar de fetch
-      await Api.createOrder({ 
-        userId: 'user-1', // Placeholder userId
-        shippingAddress: userData, 
-        items: cartCtx.items.map(item => ({ productId: item.productId, quantity: item.quantity })) 
+      if (!user || !user.id) {
+        setError('User not authenticated. Please login to place an order.');
+        setIsSubmitting(false);
+        return;
+      }
+      await Api.createOrder({
+        userId: user.id,
+        shippingAddress: userData,
+        items: cartCtx.items.map(item => ({ mealId: item.mealId, quantity: item.quantity }))
       });
       setDidSubmit(true);
       cartCtx.clearCart();
@@ -61,11 +69,11 @@ const Cart: FC<CartProps> = (props) => {
     <ul className={cartItemsClasses}>
       {cartCtx.items.map((item) => (
         <CartItem
-          key={item.productId}
+          key={item.mealId}
           name={item.name}
           amount={item.quantity}
           price={item.price}
-          onRemove={cartItemRemoveHandler.bind(null, item.productId)}
+          onRemove={cartItemRemoveHandler.bind(null, item.mealId)}
           onAdd={cartItemAddHandler.bind(null, item)}
         />
       ))}

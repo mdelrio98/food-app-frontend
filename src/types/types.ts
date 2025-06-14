@@ -8,7 +8,7 @@ export interface User {
   // Add other user-specific fields like role, address, etc.
 }
 
-export interface Product {
+export interface Meal {
   id: string; // or number
   name: string;
   description?: string;
@@ -16,18 +16,18 @@ export interface Product {
   category?: string;
   imageUrl?: string;
   stock?: number;
-  // Add other product-specific fields
+  // Add other meal-specific fields
 }
-export interface GetProductsResponse{
-  meals: Product[];
+export interface GetMealsResponse{
+  meals: Meal[];
 }
 
-export interface PostCartItemResponse extends Product{
+export interface PostCartItemResponse extends Meal{
 }
 
 export interface OrderItem {
-  productId: string; // or number, should match Product's id type
-  productName?: string; // For display purposes on the frontend
+  mealId: string; // or number, should match meal's id type
+  mealName?: string; // For display purposes on the frontend
   quantity: number;
   unitPrice: number; // Price at the time of order
 }
@@ -47,13 +47,13 @@ export interface Order {
 
 // --- Request Payload Types ---
 
-export interface CreateProductPayload extends Omit<Product, 'id'> {}
+export interface CreateMealPayload extends Omit<Meal, 'id'> {}
 
-export interface UpdateProductPayload extends Partial<Omit<Product, 'id'>> {}
+export interface UpdateMealPayload extends Partial<Omit<Meal, 'id'>> {}
 
 export interface CreateOrderPayload {
   userId: string; // or number
-  items: Array<Omit<OrderItem, 'productName' | 'unitPrice'>>;
+  items: Array<Omit<OrderItem, 'mealName' | 'unitPrice'>>;
   // Backend will likely calculate total and assign initial state and dates
   shippingAddress?: any; // Define a proper interface for Address
 }
@@ -77,7 +77,7 @@ export interface LoginResponseData {
 // --- Cart Types ---
 
 export interface ICartItem {
-  productId: string; // or number
+  mealId: string; // or number
   name: string;
   price: number;
   quantity: number;
@@ -94,6 +94,6 @@ export interface Cart {
 }
 
 export interface AddItemToCartPayload {
-  productId: string; // or number
+  mealId: string; // or number
   quantity: number;
 }
