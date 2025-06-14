@@ -77,7 +77,7 @@ export interface LoginResponseData {
 // --- Cart Types ---
 
 export interface ICartItem {
-  mealId: string; // or number
+  mealId: string; // This is the unique ID for the cart item entry, formerly mealId
   name: string;
   price: number;
   quantity: number;

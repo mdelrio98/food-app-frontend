@@ -26,8 +26,23 @@ const CartProvider: FC<CartProviderProps> = (props) => {
     setIsLoading(true);
     try {
       const response = await Api.fetchCart();
-      if (response.status === 200) {
-        setCart(response.data);
+      if (response.status === 200 && response.data && response.data.items) {
+        const backendCart = response.data;
+        const transformedItems: ICartItem[] = backendCart.items.map((cartItem: any) => ({
+          mealId: cartItem.meal.id, // Map from backend's nested meal.id
+          name: cartItem.meal.name,
+          price: cartItem.price, // Assuming cartItem.price is the unit price
+          quantity: cartItem.quantity,
+          imageUrl: cartItem.meal.imageUrl,
+        }));
+
+        setCart({
+          items: transformedItems,
+          totalAmount: backendCart.totalAmount, // Assuming totalAmount is directly available
+        });
+      } else if (response.status === 200 && response.data && !response.data.items) {
+        // Handle empty cart or cart with no items if structure differs
+        setCart(defaultCartState);
       }
     } catch (error) {
       // Error is handled by the global interceptor
@@ -43,8 +58,9 @@ const CartProvider: FC<CartProviderProps> = (props) => {
 
   const addItemToCartHandler = async (item: ICartItem) => {
     setIsLoading(true);
+    console.log(item);
     try {
-      const payload: AddItemToCartPayload = { mealId: item.mealId, quantity: item.quantity };
+      const payload: AddItemToCartPayload = { mealId: item.mealId, quantity: item.quantity }; // Assuming AddItemToCartPayload expects 'mealId' as the product identifier, which is now 'id' on ICartItem
       const response = await Api.addItemToCart(payload);
       if (response.status === 200) {
         setCart((prevCart) => {
@@ -67,7 +83,7 @@ const CartProvider: FC<CartProviderProps> = (props) => {
           } else {
             // The API response for adding an item might not be the full product, 
             // so we construct the new cart item from the submitted `item`.
-            const newItem = { ...item, mealId: item.mealId };
+            const newItem = { ...item, mealId: item.mealId }; // Ensure 'mealId' is correctly part of the new item
             updatedItems = prevCart.items.concat(newItem);
           }
 

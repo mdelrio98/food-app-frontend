@@ -53,7 +53,7 @@ const Cart: FC<CartProps> = (props) => {
       await Api.createOrder({
         userId: user.id,
         shippingAddress: userData,
-        items: cartCtx.items.map(item => ({ mealId: item.mealId, quantity: item.quantity }))
+        items: cartCtx.items.map((item:ICartItem) => ({ mealId: item.mealId, quantity: item.quantity }))
       });
       setDidSubmit(true);
       cartCtx.clearCart();
@@ -67,16 +67,24 @@ const Cart: FC<CartProps> = (props) => {
 
   const cartItems = (
     <ul className={cartItemsClasses}>
-      {cartCtx.items.map((item) => (
-        <CartItem
-          key={item.mealId}
-          name={item.name}
-          amount={item.quantity}
-          price={item.price}
-          onRemove={cartItemRemoveHandler.bind(null, item.mealId)}
-          onAdd={cartItemAddHandler.bind(null, item)}
-        />
-      ))}
+      {cartCtx.items.map((item, index) => {
+        // Fallback key logic: prefer mealId, but use index if mealId is missing.
+        const keyToUse = item.mealId !== undefined && item.mealId !== null ? item.mealId : `cart-item-${index}`;
+        if (item.mealId === undefined || item.mealId === null) {
+          /* eslint-disable-next-line no-console */
+          console.warn('Cart item missing mealId, using index as fallback key:', item);
+        }
+        return (
+          <CartItem
+            key={keyToUse}
+            name={item.name}
+            amount={item.quantity}
+            price={item.price}
+            onRemove={cartItemRemoveHandler.bind(null, item.mealId)} // Ensure item.mealId is valid for removal
+            onAdd={cartItemAddHandler.bind(null, item)}
+          />
+        );
+      })}
     </ul>
   );
 
@@ -129,6 +137,9 @@ const Cart: FC<CartProps> = (props) => {
       </div>
     </Fragment>
   );
+
+  /* eslint-disable-next-line no-console */
+  console.log('Current cartCtx.items:', cartCtx.items); // Log items when Cart component renders
 
   return (
     <Modal onClose={props.onClose}>
