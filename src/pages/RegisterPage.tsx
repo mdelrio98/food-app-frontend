@@ -26,7 +26,6 @@ const RegisterPage = () => {
   });
 
   const onSubmit = async (data: RegisterPayload) => {
-    console.log('Register form submitted with data:', data);
     try {
       const result = await dispatch(registerUser(data));
       if (registerUser.fulfilled.match(result)) {

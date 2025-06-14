@@ -75,11 +75,16 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
         state.isLoading = false;
         state.isAuthenticated = true;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+
+        const { id, name, email, token } = action.payload;
+        const user: User = { id, name, email };
+
+        state.user = user;
+        state.token = token;
+
         // Explicitly set items in localStorage for immediate availability
-        localStorage.setItem('authUser', JSON.stringify(action.payload.user));
-        localStorage.setItem('authToken', action.payload.token);
+        localStorage.setItem('authUser', JSON.stringify(user));
+        localStorage.setItem('authToken', token);
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {

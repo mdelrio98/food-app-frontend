@@ -45,7 +45,6 @@ const CartProvider: FC<CartProviderProps> = (props) => {
     setIsLoading(true);
     try {
       const payload: AddItemToCartPayload = { mealId: item.mealId, quantity: item.quantity };
-      console.log(payload);
       const response = await Api.addItemToCart(payload);
       if (response.status === 200) {
         setCart((prevCart) => {
@@ -87,6 +86,11 @@ const CartProvider: FC<CartProviderProps> = (props) => {
   };
 
   const removeItemFromCartHandler = async (id: string) => {
+    if (id === undefined) {
+      notifier.error('Cannot remove item: ID is undefined.');
+      console.error('Attempted to remove item with undefined ID');
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await Api.removeItemFromCart(id);

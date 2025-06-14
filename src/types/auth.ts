@@ -5,7 +5,7 @@
  */
 export interface User {
   id: string;
-  nombre: string;
+  name: string;
   email: string;
   // Agrega otros campos que devuelve tu API para el usuario
   // Ejemplo: role, direccion, telefono, etc.
@@ -15,7 +15,9 @@ export interface User {
  * Interfaz para la respuesta de la API de login y registro.
  */
 export interface AuthResponse {
-  user: User;
+  id: string;
+  name: string;
+  email: string;
   token: string;
   message?: string; // Mensaje opcional de éxito
 }

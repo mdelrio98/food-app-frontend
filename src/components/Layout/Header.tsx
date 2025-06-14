@@ -33,7 +33,7 @@ const Header = (props: HeaderProps) => {
           <div className={classes.authActions}>
             {isAuthenticated ? (
               <>
-                <span className={classes.userInfo}>Hola, {user?.nombre}</span>
+                <span className={classes.userInfo}>Hola, {user?.name}</span>
                 <button onClick={handleLogout} className={classes.logoutButton}>
                   Logout
                 </button>

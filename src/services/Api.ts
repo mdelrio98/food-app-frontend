@@ -87,8 +87,8 @@ export default class Api {
     return api.post('/cart/items', payload);
   };
 
-  public static removeItemFromCart = (MealId: string): AxiosPromise<Cart> => {
-    return api.delete(`/cart/items/${MealId}`);
+  public static removeItemFromCart = (mealId: string): AxiosPromise<Cart> => {
+    return api.delete(`/cart/items/${mealId}`);
   };
 
   public static clearCart = (): AxiosPromise<void> => {
