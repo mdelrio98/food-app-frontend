@@ -10,6 +10,7 @@
   align-items: center;
   border-radius: 25px;
   font-weight: bold;
+  width: 100%;
 }
 
 .button:hover,
@@ -55,5 +56,32 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+@media (max-width: 950px) {
+  .button {
+    padding: 0.75rem 2rem; /* Adjust padding for medium screens */
+  }
+  /* Optionally hide .cartText here if still too crowded */
+  /* .cartText {
+    display: none;
+  } */
+}
+
+@media (max-width: 768px) {
+  .cartText {
+    display: none;
+  }
+
+  .button {
+    padding: 0.75rem 1.5rem; /* Adjust padding when text is hidden */
+  }
+
+  .icon {
+    margin-right: 0; /* Remove margin if text is hidden, icon and badge will be closer */
+  }
+
+  .badge {
+    margin-left: 0.5rem; /* Adjust badge margin */
   }
 }

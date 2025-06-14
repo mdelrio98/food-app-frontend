@@ -1,4 +1,7 @@
 .header {
+  display: flex; /* Ensures children (.logoContainer, .navItems) are in a row */
+  justify-content: space-between; /* Keeps space-between behavior for the two main divs */
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -6,21 +9,32 @@
   height: 5rem;
   background-color: #8a2b06;
   color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 0 10%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   z-index: 10;
+  gap: 1rem;
+}
+
+.logoContainer {
+  flex-basis: 20%;
+  display: flex; /* To help align h1 if needed */
+  align-items: center;
+}
+
+.logoContainer h1 {
+  margin: 0; /* Remove default h1 margin */
 }
 
 .logo {
   text-decoration: none;
   color: white;
+  /* Font size for logo is implicitly handled by h1, or can be set explicitly */
 }
 
 .navItems {
+  flex-basis: 80%;
   display: flex;
+  justify-content: flex-end; /* Aligns cart button and auth actions to the right of this 80% block */
   align-items: center;
   gap: 2rem;
 }
@@ -31,10 +45,14 @@
   gap: 1rem;
 }
 
-.userInfo {
-  font-weight: bold;
-}
 
+.authActions {
+  width: 30%;
+  display: flex; /* Keep as flex */
+  flex-direction: column; /* Stack auth items (user/logout or login/register) */
+  align-items: center; /* Align stacked items to the right */
+  gap: 0.25rem; /* Reduced gap for vertically stacked items */
+}
 .authLink {
   text-decoration: none;
   color: white;
@@ -47,8 +65,19 @@
 .authLink:hover {
   background-color: #4d1601;
 }
+.userInfo {
+  font-weight: bold;
+  font-size: 0.875rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  vertical-align: middle; 
+}
 
 .logoutButton {
+  width: 100%;
   font: inherit;
   cursor: pointer;
   background-color: transparent;
@@ -78,4 +107,73 @@
   height: 100%;
   object-fit: cover;
   transform: rotateZ(-5deg) translateY(-4rem) translateX(-1rem);
+}
+
+/* Responsive adjustments */
+
+@media (max-width: 950px) {
+  .header {
+    padding: 0 10%; /* Adjusted padding */
+    /* flex-direction: column; If stacking at 950px is desired, uncomment and adjust .logoContainer & .navItems widths below */
+  }
+
+  /* If .header becomes column at 950px, these might need width: 100% */
+  /* .logoContainer {
+    width: 100%;
+    justify-content: center; 
+  } */
+  /* .navItems {
+    width: 100%;
+  } */
+
+  .navItems {
+    gap: 1rem; 
+    justify-content: flex-end; /* Ensure nav items stay to the right */
+  }
+  
+  .logoutButton,
+  .authLink {
+    width: 100%;
+  }
+
+}
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 5%;
+    height: auto;
+    min-height: 4rem;
+    flex-direction: column; /* Stack .logoContainer and .navItems */
+    align-items: center; /* Center them when stacked */
+  }
+
+  .logoContainer {
+    width: 100%;
+    justify-content: center; /* Center the logo h1 within its container */
+    margin-bottom: 0.5rem;
+  }
+
+  .navItems {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Stack cart button and auth actions vertically */
+    align-items: center; /* Center them on mobile */
+    gap: 1rem;
+  }
+
+  .logoutButton,
+  .authLink {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+    min-width: 80px; /* Give buttons a bit of min-width */
+    text-align: center;
+    width: 100%;
+  }
+
+  .main-image {
+    height: 20rem;
+  }
+
+  .main-image img {
+    transform: rotateZ(-3deg) translateY(-2rem) translateX(-0.5rem);
+  }
 }

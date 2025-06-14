@@ -25,9 +25,11 @@ const Header = (props: HeaderProps) => {
   return (
     <Fragment>
       <header className={classes.header}>
-        <h1>
-          <Link to="/" className={classes.logo}>ReactMeals</Link>
-        </h1>
+        <div className={classes.logoContainer}>
+          <h1>
+            <Link to="/" className={classes.logo}>ReactMeals</Link>
+          </h1>
+        </div>
         <div className={classes.navItems}>
           {isAuthenticated && <HeaderCartButton onClick={props.onShowCart} />}
           <div className={classes.authActions}>
