@@ -10,7 +10,7 @@
   align-items: center;
   border-radius: 25px;
   font-weight: bold;
-  width: 100%;
+  width: 50%;
 }
 
 .button:hover,
@@ -60,6 +60,7 @@
 }
 @media (max-width: 950px) {
   .button {
+    width: 100%;
     padding: 0.75rem 2rem; /* Adjust padding for medium screens */
   }
   /* Optionally hide .cartText here if still too crowded */

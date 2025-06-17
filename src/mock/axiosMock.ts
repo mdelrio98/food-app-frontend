@@ -1,11 +1,20 @@
 import MockAdapter from 'axios-mock-adapter';
-import api from '../services/axiosInstance';
+import { AxiosInstance } from 'axios';
+import { api } from '../services/axiosInstance';
+
+// Define the type for a meal
+interface Meal {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+}
 
 // Create a new instance of the mock adapter on the axiosInstance
-const mock = new MockAdapter(api, { delayResponse: 500 });
+const mock = new MockAdapter(api as AxiosInstance, { delayResponse: 500 });
 
-// Sample meal data
-const DUMMY_MEALS = [
+// Sample meal data with the Meal type
+const DUMMY_MEALS: Meal[] = [
   {
     id: 'm1',
     name: 'Sushi',
